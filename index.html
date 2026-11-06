@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>海賊の宝の番号</title>
+<link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#06121f;--bg2:#0d2a45;--sea:#0a3a5c;--gold:#f2c14e;--parch:#f3e3b8;--ink:#3b2a14;--red:#ff6b5b;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#06121f;--bg2:#0d2a45}}
+:root[data-theme="dark"]{--bg1:#06121f;--bg2:#0d2a45}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font-family:"Potta One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;color:var(--parch);background:linear-gradient(var(--bg1),var(--bg2));display:flex;align-items:center;justify-content:center;padding:24px 16px;overflow-x:hidden}
+.stars{position:fixed;inset:0;background-image:radial-gradient(2px 2px at 20% 30%,#fff8,transparent),radial-gradient(1.5px 1.5px at 70% 15%,#fff8,transparent),radial-gradient(2px 2px at 85% 60%,#fff6,transparent),radial-gradient(1.5px 1.5px at 40% 75%,#fff6,transparent);pointer-events:none}
+.wave{position:fixed;left:0;right:0;bottom:0;height:90px;background:var(--sea);opacity:.7;clip-path:polygon(0 40%,10% 30%,20% 40%,30% 50%,40% 40%,50% 30%,60% 40%,70% 50%,80% 40%,90% 30%,100% 40%,100% 100%,0 100%);animation:bob 4s ease-in-out infinite}
+.wave.b{height:70px;opacity:.9;background:#072b45;animation-duration:3s;animation-direction:reverse}
+@keyframes bob{50%{transform:translateY(8px)}}
+.card{position:relative;z-index:1;width:100%;max-width:420px;background:var(--parch);color:var(--ink);border:4px solid #8a5a2b;border-radius:14px;padding:28px 22px;text-align:center;box-shadow:0 10px 40px #000a}
+.flag{font-size:56px;line-height:1;animation:sway 3s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(6deg)}}
+h1{font-size:24px;margin:10px 0 6px}
+p{margin:6px 0 16px;font-size:15px;line-height:1.7}
+input{width:100%;font:inherit;font-size:20px;text-align:center;padding:12px;border:3px solid #8a5a2b;border-radius:10px;background:#fff8e2;color:var(--ink);outline:none}
+input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #f2c14e66}
+button{margin-top:14px;width:100%;font:inherit;font-size:19px;padding:12px;border:0;border-radius:10px;background:#8a1f1f;color:#fff3d6;cursor:pointer;box-shadow:0 4px 0 #4d1010}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #4d1010}
+.err{min-height:28px;margin-top:12px;color:#b3261e;font-size:17px}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.hide{display:none}
+.bar{height:22px;border:3px solid #8a5a2b;border-radius:12px;background:#fff8e2;overflow:hidden;margin:16px 0 8px}
+.fill{height:100%;width:0;background:repeating-linear-gradient(45deg,#d99a1e,#d99a1e 10px,#f2c14e 10px,#f2c14e 20px)}
+.pct{font-size:34px}
+.digits{display:flex;gap:10px;justify-content:center;margin:18px 0}
+.d{width:62px;height:84px;display:flex;align-items:center;justify-content:center;font-size:52px;background:#1a1208;color:var(--gold);border:3px solid #8a5a2b;border-radius:10px;opacity:0;transform:rotateX(90deg) scale(.6)}
+.d.on{opacity:1;transform:none;transition:transform .5s cubic-bezier(.2,1.4,.4,1),opacity .3s}
+.chest{font-size:60px;animation:sway 1.2s ease-in-out infinite}
+h1{font-size:27px;letter-spacing:.06em;text-shadow:0 2px 0 #fff8e2,0 0 14px #f2c14e88}
+.card{box-shadow:0 0 40px #f2c14e55,0 10px 40px #000a}
+.flag{font-size:72px;filter:drop-shadow(0 0 14px #000a)}
+.flash{position:fixed;inset:0;z-index:5;pointer-events:none;background:#cfe8ff;opacity:0;animation:lightning 7s infinite}
+@keyframes lightning{0%,91%,94%,97%,100%{opacity:0}92%{opacity:.6}93%{opacity:.1}95%{opacity:.4}}
+.ship{position:fixed;bottom:55px;left:-140px;font-size:84px;z-index:0;filter:drop-shadow(0 0 10px #000);animation:sail 20s linear infinite,bobship 2s ease-in-out infinite}
+@keyframes sail{to{left:110%}}
+@keyframes bobship{50%{transform:translateY(-10px) rotate(-5deg)}}
+.alarm{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:0;background:radial-gradient(circle,#ff2a1a00 30%,#ff2a1acc 100%)}
+.alarm.on{animation:alarm .8s}
+@keyframes alarm{0%,40%,80%{opacity:1}20%,60%,100%{opacity:0}}
+.rumble{animation:rumble .12s infinite}
+@keyframes rumble{25%{transform:translate(2px,-2px)}50%{transform:translate(-2px,2px)}75%{transform:translate(2px,2px)}}
+.fill{box-shadow:0 0 16px #f2c14e;transition:none}
+.pct{font-size:44px;text-shadow:0 0 12px #f2c14e}
+.boom{position:fixed;inset:0;z-index:7;pointer-events:none;opacity:0;background:#fff3c4}
+.boom.on{animation:boom 1s ease-out}
+@keyframes boom{0%{opacity:1}100%{opacity:0}}
+.d{box-shadow:0 0 0 #f2c14e00}
+.d.on{text-shadow:0 0 20px #f2c14e;box-shadow:0 0 24px #f2c14eaa;animation:pulse 1.6s ease-in-out .8s infinite}
+@keyframes pulse{50%{box-shadow:0 0 40px #f2c14e;filter:brightness(1.25)}}
+.coin{position:fixed;top:45%;left:50%;font-size:28px;z-index:6;pointer-events:none;animation:fly 1.7s ease-out forwards}
+@keyframes fly{to{transform:translate(var(--x),var(--y)) rotate(540deg);opacity:0}}
+.moon{position:fixed;top:6%;right:8%;width:96px;height:96px;border-radius:50%;z-index:0;background:radial-gradient(circle at 35% 35%,#fffbe6,#e9dca6 60%,#b9a96a);box-shadow:0 0 60px 24px #f2e8b855}
+.clouds{position:fixed;top:0;left:0;width:200%;height:45%;z-index:0;background-repeat:repeat-x;background-size:50% 100%;background-image:radial-gradient(ellipse 22% 40% at 12% 40%,#010409dd,transparent),radial-gradient(ellipse 28% 45% at 38% 30%,#030d18e6,transparent),radial-gradient(ellipse 24% 40% at 62% 50%,#010409dd,transparent),radial-gradient(ellipse 30% 45% at 88% 35%,#030d18e6,transparent);animation:drift 45s linear infinite}
+@keyframes drift{to{transform:translateX(-50%)}}
+.ship{font-size:120px;bottom:75px}
+.wave{transform-origin:bottom}
+.wave.c{height:140px;opacity:.55;background:#0b4a73;animation-duration:5s}
+@keyframes bob{50%{transform:translateY(14px) scaleY(1.2)}}
+.rain{position:fixed;inset:-20% 0 0 0;z-index:4;pointer-events:none;opacity:.35;background-image:linear-gradient(100deg,transparent 48%,#bcd8ff 50%,transparent 52%);background-size:26px 90px;animation:rain .4s linear infinite}
+@keyframes rain{to{background-position:-26px 90px}}
+.vig{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,#000b 100%)}
+.bolt{position:fixed;top:0;width:110px;height:60%;z-index:2;opacity:0;pointer-events:none;filter:drop-shadow(0 0 10px #9cf) drop-shadow(0 0 24px #7af)}
+.bolt.on{animation:bolt .5s}
+@keyframes bolt{0%{opacity:1}12%{opacity:.1}25%{opacity:1}100%{opacity:0}}
+.flash{animation:none}
+.flash.on{animation:fl .7s}
+@keyframes fl{0%{opacity:.75}12%{opacity:.05}28%{opacity:.55}100%{opacity:0}}
+.snd{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:8;width:48px;height:48px;margin:0;padding:0;font-size:22px;border-radius:50%;background:#000a;border:2px solid var(--gold);box-shadow:none}
+body{background:linear-gradient(#02070d 0%,#08202c 50%,#17433f 78%,#0a2433 100%)}
+.card{background:radial-gradient(ellipse at center,#f6e8bf 55%,#d6b36a 100%);border:4px dashed #5a3a18;outline:6px double #8a5a2b;outline-offset:5px;box-shadow:inset 0 0 50px #8a5a2baa,0 0 40px #3fe0b055,0 10px 40px #000a}
+.glow{position:fixed;left:0;right:0;bottom:120px;height:220px;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 100%,#3fe0b050,transparent 70%)}
+.ship{left:-380px;bottom:62px;font-size:0;opacity:.92;filter:drop-shadow(0 0 22px #3fe0b099);animation:sail 45s linear infinite,bobship 3.2s ease-in-out infinite}
+.ship svg{display:block;width:min(340px,80vw);height:auto}
+.flap{transform-box:fill-box;transform-origin:left center;animation:flap .7s ease-in-out infinite alternate}
+@keyframes flap{to{transform:skewY(7deg) scaleX(.9)}}
+.kraken{position:fixed;bottom:45px;width:140px;height:290px;z-index:0;pointer-events:none;transform-origin:50% 100%;animation:ksway 6s ease-in-out infinite}
+.k1{left:-25px}
+.k2{right:-25px;animation-delay:-3s;animation-duration:7s}
+@keyframes ksway{50%{transform:rotate(8deg)}}
+.fog{position:fixed;left:0;width:200%;bottom:70px;height:170px;z-index:0;pointer-events:none;background-repeat:repeat-x;background-size:50% 100%;background-image:radial-gradient(ellipse 25% 50% at 20% 60%,#a8e0d055,transparent),radial-gradient(ellipse 30% 40% at 55% 50%,#a8e0d044,transparent),radial-gradient(ellipse 22% 50% at 85% 65%,#a8e0d055,transparent);animation:drift 60s linear infinite}
+.fog.f2{bottom:20px;height:130px;opacity:.8;animation-duration:40s;animation-direction:reverse}
+.wisp{position:fixed;bottom:100px;width:10px;height:10px;border-radius:50%;background:#9ff7c8;box-shadow:0 0 14px 6px #3fe0b0aa;z-index:2;pointer-events:none;opacity:0;animation:wisp 7s ease-in infinite}
+@keyframes wisp{0%{opacity:0;transform:translate(0,0)}20%{opacity:.9}100%{opacity:0;transform:translate(30px,-320px)}}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="flash" id="flash"></div><div class="alarm" id="alarm"></div><div class="boom" id="boom"></div>
+<div class='moon'></div><div class='clouds'></div><div class='glow'></div>
+<svg class='kraken k1' viewBox='0 0 120 300'><path d='M60,300 C10,230 105,200 52,140 C20,100 78,80 56,28' fill='none' stroke='#0c2f2b' stroke-width='24' stroke-linecap='round'/><path d='M60,300 C10,230 105,200 52,140 C20,100 78,80 56,28' fill='none' stroke='#1d6b5c' stroke-width='3' stroke-dasharray='1 14' stroke-linecap='round' transform='translate(-6,0)'/></svg>
+<svg class='kraken k2' viewBox='0 0 120 300'><path d='M60,300 C110,240 15,190 70,130 C100,90 45,70 66,20' fill='none' stroke='#0c2f2b' stroke-width='24' stroke-linecap='round'/><path d='M60,300 C110,240 15,190 70,130 C100,90 45,70 66,20' fill='none' stroke='#1d6b5c' stroke-width='3' stroke-dasharray='1 14' stroke-linecap='round' transform='translate(6,0)'/></svg>
+<div class='ship'><svg viewBox='0 0 340 260' width='340' height='260'>
+<g stroke='#070c10' stroke-width='5' stroke-linecap='round'><line x1='90' y1='45' x2='90' y2='165'/><line x1='170' y1='12' x2='170' y2='165'/><line x1='250' y1='48' x2='250' y2='165'/><line x1='325' y1='150' x2='348' y2='128'/></g>
+<g stroke='#070c10' stroke-width='1.5' fill='none'><path d='M90,45 L170,12 L250,48 L325,150'/><path d='M90,45 L22,150'/><path d='M170,12 L22,150'/></g>
+<g fill='#3a5558' stroke='#0b1518' stroke-width='1.5' opacity='.92'><polygon points='120,30 220,30 226,104 214,112 205,100 190,116 175,102 160,118 145,102 130,112 124,100'/><polygon points='52,62 128,62 131,120 121,128 110,116 96,130 82,116 68,126 58,114'/><polygon points='212,64 288,64 291,124 281,132 270,118 256,133 241,118 228,128 218,116'/></g>
+<path d='M20,170 L60,158 L292,158 L326,148 Q322,212 272,230 L85,230 Q34,218 20,170 Z' fill='#070c10'/>
+<rect x='22' y='136' width='54' height='26' fill='#070c10'/>
+<g fill='#9ff7c8'><rect x='30' y='144' width='7' height='9'/><rect x='44' y='144' width='7' height='9'/><rect x='58' y='144' width='7' height='9'/></g>
+<g fill='#16262a' stroke='#2b4a4a'><circle cx='100' cy='192' r='5'/><circle cx='140' cy='192' r='5'/><circle cx='180' cy='192' r='5'/><circle cx='220' cy='192' r='5'/><circle cx='260' cy='192' r='5'/></g>
+<g class='flap'><rect x='171' y='2' width='44' height='28' fill='#000' stroke='#555'/><text x='193' y='24' font-size='20' text-anchor='middle' fill='#f2f2f2'>☠</text></g>
+</svg></div>
+<div class='fog'></div>
+<div class="wave c"></div><div class="wave"></div><div class="wave b"></div><div class="fog f2"></div>
+<i class="wisp" style="left:12%"></i><i class="wisp" style="left:30%;animation-delay:2s"></i><i class="wisp" style="left:55%;animation-delay:4s"></i><i class="wisp" style="left:72%;animation-delay:1s"></i><i class="wisp" style="left:90%;animation-delay:5s"></i>
+<div class="rain"></div><div class="vig"></div>
+<svg class="bolt" id="bolt" viewBox="0 0 100 300" preserveAspectRatio="none"><polyline points="55,0 40,90 62,100 30,200 50,208 20,300" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/></svg>
+<button class="snd" id="snd" type="button" aria-label="効果音">🔊</button>
+<main class="card" id="card">
+  <section id="s1">
+    <div class="flag">🏴‍☠️</div>
+    <h1>☠ 海賊の隠し部屋 ☠</h1>
+    <p>ここは悪名高き海賊の隠し部屋。<br>合言葉を知る者だけが、宝の番号を手にできる…</p>
+    <input id="word" type="text" placeholder="合言葉を入力" autocomplete="off" autocapitalize="off" aria-label="合言葉">
+    <button id="go" type="button">⚓ 扉を開く</button>
+    <div class="err" id="err" role="alert"></div>
+  </section>
+  <section id="s2" class="hide">
+    <div class="chest">🧰</div>
+    <h1>宝箱をこじ開けろ！</h1>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+    <div class="pct" id="pct">0%</div>
+    <p id="msg">錨を上げろ！</p>
+  </section>
+  <section id="s3" class="hide">
+    <div class="chest">💰</div>
+    <h1>🔥 宝の番号はこれだ！ 🔥</h1>
+    <div class="digits" id="digits"></div>
+    <p>この番号を忘れるなよ、船乗り！ ☠️</p>
+  </section>
+</main>
+<script>
+(function(){
+  var ANSWER="はやまにいこう", PIN="0122";
+  var $=function(i){return document.getElementById(i)};
+  var AC=null,master=null,muted=false,ambOn=false,drumT=null;
+  function unlock(){
+    if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=muted?0:2.2;var cp=AC.createDynamicsCompressor();master.connect(cp);cp.connect(AC.destination);}catch(e){return}}
+    if(AC.state==='suspended')AC.resume();
+    ambience();
+  }
+  function nbuf(sec){var b=AC.createBuffer(1,AC.sampleRate*sec,AC.sampleRate),d=b.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b}
+  function tone(f,t0,dur,type,vol,f2){
+    if(!AC)return;var t=AC.currentTime+t0,o=AC.createOscillator(),g=AC.createGain();
+    o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.3,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.05);
+  }
+  function noise(t0,dur,vol,freq,type){
+    if(!AC)return;var t=AC.currentTime+t0,s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();
+    s.buffer=nbuf(dur);f.type=type||'lowpass';f.frequency.value=freq||800;
+    g.gain.setValueAtTime(vol||.4,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    s.connect(f);f.connect(g);g.connect(master);s.start(t);
+  }
+  function ambience(){
+    if(!AC||ambOn)return;ambOn=true;
+    var s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain(),l=AC.createOscillator(),lg=AC.createGain();
+    s.buffer=nbuf(4);s.loop=true;f.type='lowpass';f.frequency.value=450;g.gain.value=.1;
+    l.frequency.value=.15;lg.gain.value=.07;l.connect(lg);lg.connect(g.gain);
+    s.connect(f);f.connect(g);g.connect(master);s.start();l.start();
+  }
+  function thunder(){noise(0,2.6,.9,220);noise(.2,1.8,.5,110);tone(60,0,1.6,'sine',.6,28)}
+  function bad(){tone(170,0,.25,'sawtooth',.25,120);tone(115,.25,.45,'sawtooth',.25,60);noise(0,.2,.2,500)}
+  function cannon(){noise(0,1,1,500);tone(130,0,.8,'sine',.9,30)}
+  function coins(){for(var i=0;i<9;i++)tone(1300+Math.random()*1200,i*.06,.2,'triangle',.14)}
+  function fanfare(){[523,659,784,1047].forEach(function(f,i){var d=i===3?.9:.28;tone(f,i*.16,d,'triangle',.28);tone(f/2,i*.16,d,'square',.07)})}
+  function sfxLoad(){tone(180,0,3.8,'sawtooth',.04,720);drumT=setInterval(function(){tone(95,0,.14,'sine',.6,45);noise(0,.08,.15,300)},260)}
+  function sfxReveal(){clearInterval(drumT);cannon();setTimeout(coins,150);setTimeout(fanfare,350)}
+  function strike(){
+    var b=$('bolt'),f=$('flash');b.style.left=(8+Math.random()*75)+'%';
+    b.classList.remove('on');f.classList.remove('on');void b.offsetWidth;
+    b.classList.add('on');f.classList.add('on');
+    setTimeout(thunder,350+Math.random()*700);
+    setTimeout(strike,5000+Math.random()*6000);
+  }
+  var busy=false;
+  function norm(s){return s.normalize("NFKC").replace(/[\s　]+/g,"")}
+  function check(){
+    if(busy)return;
+    var ok=norm($("word").value)===ANSWER;
+    if(!ok){
+      $("err").textContent="合言葉が違います";
+      var c=$("card");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");var a=$("alarm");a.classList.remove("on");void a.offsetWidth;a.classList.add("on");bad();
+      return;
+    }
+    busy=true;
+    $("s1").classList.add("hide");$("s2").classList.remove("hide");$("card").classList.add("rumble");sfxLoad();
+    load();
+  }
+  function load(){
+    var msgs=[[0,"錨を上げろ！"],[25,"帆を張れ！"],[50,"宝の島が見えてきた…"],[75,"砂を掘れ！"],[95,"鍵が回る…"]];
+    var start=Date.now(),dur=3800;
+    (function tick(){
+      var t=Math.min(1,(Date.now()-start)/dur);
+      var p=Math.round((t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2)*100);
+      $("fill").style.width=p+"%";$("pct").textContent=p+"%";
+      for(var i=0;i<msgs.length;i++)if(p>=msgs[i][0])$("msg").textContent=msgs[i][1];
+      if(p<100)requestAnimationFrame(tick);else setTimeout(show,600);
+    })();
+  }
+  function show(){
+    $("s2").classList.add("hide");$("s3").classList.remove("hide");$("card").classList.remove("rumble");boom();sfxReveal();
+    var box=$("digits");
+    PIN.split("").forEach(function(ch,i){
+      var d=document.createElement("div");d.className="d";d.textContent=ch;box.appendChild(d);
+      setTimeout(function(){d.classList.add("on");tone(600+i*150,0,.4,'triangle',.35);noise(0,.15,.2,2000,'highpass')},300+i*450);
+    });
+  }
+  function boom(){
+    $("boom").classList.add("on");
+    var em=["🪙","💰","💎","🪙"];
+    for(var i=0;i<32;i++){
+      var c=document.createElement("div");c.className="coin";c.textContent=em[i%4];
+      var ang=Math.random()*Math.PI*2,dist=140+Math.random()*220;
+      c.style.setProperty("--x",Math.cos(ang)*dist+"px");
+      c.style.setProperty("--y",Math.sin(ang)*dist-60+"px");
+      document.body.appendChild(c);
+      setTimeout(function(el){el.remove()}.bind(null,c),1800);
+    }
+  }
+  $("go").addEventListener("click",check);
+  document.addEventListener('pointerdown',unlock,true);
+  document.addEventListener('keydown',unlock,true);
+  $('snd').addEventListener('click',function(){muted=!muted;this.textContent=muted?'🔇':'🔊';if(master)master.gain.value=muted?0:2.2});
+  setTimeout(strike,2000);
+  $("word").addEventListener("keydown",function(e){if(e.key==="Enter")check()});
+})();
+</script>
+</body>
+</html>
